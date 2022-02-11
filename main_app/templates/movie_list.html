@@ -1,5 +1,4 @@
-{% extends '_base.html' %}
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 
 <h1 class="title">Trending Movies</h1>
 
@@ -13,6 +12,7 @@
     </div>
     </div>
     <a class="button is-dark" href="{% url 'movie_list' %}">Clear Search</a>
+    <a class="button is-dark" href="{% url 'movie_create' %}">Add Movie</a>
 </form>
 <div class="gallery">
     {% for movie in movies %}
@@ -30,4 +30,4 @@
     </a>
     {% endfor %}
 </div>
-{% endblock %
+{% endblock %}
