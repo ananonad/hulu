@@ -1,9 +1,10 @@
+from django.urls import reverse
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.views import View 
 from django.views.generic.edit import CreateView
 from django.views.generic.base import TemplateView
-from django.views.generic import DetailView
+from django.views.generic import DetailView, UpdateView, DeleteView
 from .models import Movie
 
 
@@ -28,12 +29,34 @@ class MovieList(TemplateView):
             context["header"] = "Trending Movies"
         return context
 
+class MovieDetail(DetailView):
+    model = Movie
+    template_name = "movie_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["movies"] = Movie.objects.all()
+        return context
+
+
 class MovieCreate(CreateView):
     model = Movie
     fields = ['name', 'img', 'bio', 'verified_movie']
     template_name = "movie_create.html"
-    success_url = "/movies/"
+    def get_success_url(self):
+        return reverse ('movie detail', kwargs={'pk': self.object.pk})
 
-class MovieDetail(DetailView):
+
+class MovieUpdate(UpdateView):
     model = Movie
-    template_name = "movie_detail.html"
+    fields = ['name', 'img', 'bio', 'verified_movie']
+    template_name = "movie_update.html"
+
+    def get_success_url(self):
+        return reverse ('movie detail', kwargs={'pk': self.object.pk})
+
+class MovieDelete(DeleteView):
+    model = Movie
+    template_name = "movie_delete_confirmation.html"
+    success_url = "/movies/"
+        
